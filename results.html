@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results - Namibian Learning Quiz System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">🎓 NamiQuiz</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" id="loginLink">Login</a></li>
+                <li><a href="signup.html" id="signupLink">Sign Up</a></li>
+                <li style="display: none;" id="profileLink"><a href="profile.html">My Profile</a></li>
+                <li style="display: none;" id="logoutLink"><a href="#" onclick="logoutUser()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="results-container">
+            <h1 style="color: #667eea; margin-bottom: 30px;">Your Quiz Results</h1>
+            
+            <!-- Score Display -->
+            <div class="score-display" id="scoreDisplay">
+                <h2 id="scoreText">Loading...</h2>
+                <p id="scoreMessage">Please wait...</p>
+            </div>
+
+            <!-- Results Breakdown -->
+            <div class="results-breakdown" id="resultsBreakdown" style="display: none;">
+                <div class="result-item">
+                    <h3 id="correctCount">0</h3>
+                    <p>Correct Answers</p>
+                </div>
+                <div class="result-item">
+                    <h3 id="incorrectCount">0</h3>
+                    <p>Incorrect Answers</p>
+                </div>
+                <div class="result-item">
+                    <h3 id="percentageScore">0%</h3>
+                    <p>Accuracy</p>
+                </div>
+            </div>
+
+            <!-- Performance Message -->
+            <div id="performanceMessage" style="margin: 30px 0; padding: 20px; border-radius: 10px; display: none;"></div>
+
+            <!-- Action Buttons -->
+            <div style="margin-top: 40px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="retakeQuiz()" class="btn">🔄 Retake Quiz</button>
+                <a href="quiz.html" class="btn btn-secondary">📚 Try Another Category</a>
+                <a href="index.html" class="btn btn-secondary">🏠 Back to Home</a>
+            </div>
+
+            <!-- Question Review Section -->
+            <div id="questionReview" style="margin-top: 50px; display: none;">
+                <h2 style="color: #667eea; text-align: center; margin-bottom: 30px;">Question Review</h2>
+                <div id="reviewContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
+        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+    </footer>
+
+    <script>
+        // Get results from sessionStorage
+        let quizResults = null;
+        let categoryId = null;
+
+        window.addEventListener('DOMContentLoaded', function() {
+            // Try to get results from sessionStorage
+            const resultsData = sessionStorage.getItem('quizResults');
+            
+            if (resultsData) {
+                quizResults = JSON.parse(resultsData);
+                displayResults();
+            } else {
+                // No results found - show message
+                document.getElementById('scoreDisplay').innerHTML = `
+                    <h2>No Results Found</h2>
+                    <p>You haven't completed a quiz yet!</p>
+                `;
+                document.getElementById('scoreDisplay').style.background = '#6c757d';
+            }
+        });
+
+        function displayResults() {
+            const { score, totalQuestions, categoryName, userAnswers, questions, userName } = quizResults;
+            categoryId = quizResults.categoryId;
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const incorrect = totalQuestions - score;
+
+            // Update score display
+            document.getElementById('scoreText').textContent = `${score} / ${totalQuestions}`;
+            document.getElementById('scoreMessage').textContent = `You scored ${percentage}% in ${categoryName}`;
+
+            // Show breakdown
+            document.getElementById('resultsBreakdown').style.display = 'grid';
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('percentageScore').textContent = percentage + '%';
+
+            // Show performance message
+            const perfMsg = document.getElementById('performanceMessage');
+            perfMsg.style.display = 'block';
+            
+            let message = '';
+            let bgColor = '';
+            
+            if (percentage >= 90) {
+                message = '🌟 Outstanding! You have excellent knowledge of this subject!';
+                bgColor = '#d4edda';
+                perfMsg.style.color = '#155724';
+            } else if (percentage >= 75) {
+                message = '🎉 Great job! You have a strong understanding of this topic!';
+                bgColor = '#d1ecf1';
+                perfMsg.style.color = '#0c5460';
+            } else if (percentage >= 60) {
+                message = '👍 Good effort! Keep practicing to improve your score!';
+                bgColor = '#fff3cd';
+                perfMsg.style.color = '#856404';
+            } else if (percentage >= 40) {
+                message = '📚 Not bad! Review the material and try again!';
+                bgColor = '#f8d7da';
+                perfMsg.style.color = '#721c24';
+            } else {
+                message = '💪 Keep learning! Practice makes perfect!';
+                bgColor = '#f8d7da';
+                perfMsg.style.color = '#721c24';
+            }
+            
+            perfMsg.textContent = message;
+            perfMsg.style.background = bgColor;
+            perfMsg.style.borderLeft = '5px solid ' + (percentage >= 60 ? '#28a745' : '#dc3545');
+
+            // Display question review
+            displayQuestionReview(questions, userAnswers);
+
+            // Save results to database
+            saveResultsToDatabase(userName || 'Anonymous', categoryId, score, totalQuestions);
+        }
+
+        function displayQuestionReview(questions, userAnswers) {
+            const reviewContainer = document.getElementById('reviewContainer');
+            const questionReview = document.getElementById('questionReview');
+            
+            questionReview.style.display = 'block';
+            reviewContainer.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer.toLowerCase() === question.correct_answer.toLowerCase() || 
+                                  userAnswer.toLowerCase() === (question.text_answer || '').toLowerCase();
+                
+                const reviewCard = document.createElement('div');
+                reviewCard.style.background = '#f8f9fa';
+                reviewCard.style.padding = '20px';
+                reviewCard.style.borderRadius = '10px';
+                reviewCard.style.marginBottom = '20px';
+                reviewCard.style.borderLeft = `5px solid ${isCorrect ? '#28a745' : '#dc3545'}`;
+                
+                let correctAnswerText = '';
+                if (question.question_type === 'multiple_choice') {
+                    const options = ['A', 'B', 'C', 'D'];
+                    const optionIndex = options.indexOf(question.correct_answer.toUpperCase());
+                    correctAnswerText = question[`option_${question.correct_answer.toLowerCase()}`];
+                } else if (question.question_type === 'true_false') {
+                    correctAnswerText = question[`option_${question.correct_answer.toLowerCase()}`];
+                } else {
+                    correctAnswerText = question.text_answer;
+                }
+
+                reviewCard.innerHTML = `
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <span style="font-size: 24px; margin-right: 10px;">
+                            ${isCorrect ? '✅' : '❌'}
+                        </span>
+                        <strong style="font-size: 18px;">Question ${index + 1}</strong>
+                    </div>
+                    <p style="font-size: 16px; margin-bottom: 15px;"><strong>${question.question_text}</strong></p>
+                    <div style="margin-bottom: 10px;">
+                        <strong style="color: ${isCorrect ? '#28a745' : '#dc3545'};">Your Answer:</strong> 
+                        ${userAnswer || 'No answer'}
+                    </div>
+                    ${!isCorrect ? `
+                    <div style="margin-bottom: 10px;">
+                        <strong style="color: #28a745;">Correct Answer:</strong> 
+                        ${correctAnswerText}
+                    </div>
+                    ` : ''}
+                    <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                        <strong>Explanation:</strong>
+                        <p style="margin-top: 8px;">${question.explanation}</p>
+                    </div>
+                `;
+                
+                reviewContainer.appendChild(reviewCard);
+            });
+        }
+
+        async function saveResultsToDatabase(userName, categoryId, score, totalQuestions) {
+            try {
+                const response = await fetch('php/save_results.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_name: userName,
+                        category_id: categoryId,
+                        score: score,
+                        total_questions: totalQuestions
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log('Results saved successfully!');
+                } else {
+                    console.error('Error saving results:', data.error);
+                }
+            } catch (error) {
+                console.error('Error saving results:', error);
+            }
+        }
+
+        function retakeQuiz() {
+            if (categoryId) {
+                window.location.href = `quiz.html?category=${categoryId}`;
+            } else {
+                window.location.href = 'quiz.html';
+            }
+        }
+    </script>
+</body>
+</html>

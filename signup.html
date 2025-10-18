@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - NamiQuiz</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .fruit-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .fruit-option {
+            cursor: pointer;
+            text-align: center;
+            padding: 15px;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .fruit-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .fruit-option.selected {
+            border-color: #667eea;
+            background: #e3e9ff;
+            transform: scale(1.1);
+        }
+        
+        .fruit-emoji {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .fruit-name {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .fruit-selector {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .fruit-emoji {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">🎓 NamiQuiz</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content" style="max-width: 600px;">
+        <h1 style="text-align: center; color: #667eea; margin-bottom: 20px;">Create Your Account</h1>
+        <p style="text-align: center; margin-bottom: 30px; color: #666;">
+            Join NamiQuiz to track your progress and become a learning champion!
+        </p>
+
+        <form id="signupForm">
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" name="fullName" required 
+                       placeholder="Enter your full name">
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" name="username" required 
+                       placeholder="Choose a unique username"
+                       minlength="3" maxlength="20">
+                <small style="color: #666; font-size: 13px;">
+                    3-20 characters, letters and numbers only
+                </small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required 
+                       placeholder="your.email@example.com">
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="Create a strong password"
+                       minlength="6">
+                <small style="color: #666; font-size: 13px;">
+                    At least 6 characters
+                </small>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password *</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required 
+                       placeholder="Re-enter your password">
+            </div>
+
+            <!-- Profile Picture Selection -->
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 15px; font-size: 18px; font-weight: 600;">
+                    Choose Your Profile Picture 🎨
+                </label>
+                <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+                    Select a fruit that represents you!
+                </p>
+                
+                <div class="fruit-selector" id="fruitSelector">
+                    <div class="fruit-option selected" data-fruit="apple">
+                        <span class="fruit-emoji">🍎</span>
+                        <span class="fruit-name">Apple</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="banana">
+                        <span class="fruit-emoji">🍌</span>
+                        <span class="fruit-name">Banana</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="orange">
+                        <span class="fruit-emoji">🍊</span>
+                        <span class="fruit-name">Orange</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="grape">
+                        <span class="fruit-emoji">🍇</span>
+                        <span class="fruit-name">Grape</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="watermelon">
+                        <span class="fruit-emoji">🍉</span>
+                        <span class="fruit-name">Watermelon</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="strawberry">
+                        <span class="fruit-emoji">🍓</span>
+                        <span class="fruit-name">Strawberry</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="pineapple">
+                        <span class="fruit-emoji">🍍</span>
+                        <span class="fruit-name">Pineapple</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="mango">
+                        <span class="fruit-emoji">🥭</span>
+                        <span class="fruit-name">Mango</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="peach">
+                        <span class="fruit-emoji">🍑</span>
+                        <span class="fruit-name">Peach</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="cherry">
+                        <span class="fruit-emoji">🍒</span>
+                        <span class="fruit-name">Cherry</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="kiwi">
+                        <span class="fruit-emoji">🥝</span>
+                        <span class="fruit-name">Kiwi</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="lemon">
+                        <span class="fruit-emoji">🍋</span>
+                        <span class="fruit-name">Lemon</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="avocado">
+                        <span class="fruit-emoji">🥑</span>
+                        <span class="fruit-name">Avocado</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="coconut">
+                        <span class="fruit-emoji">🥥</span>
+                        <span class="fruit-name">Coconut</span>
+                    </div>
+                    <div class="fruit-option" data-fruit="pear">
+                        <span class="fruit-emoji">🍐</span>
+                        <span class="fruit-name">Pear</span>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="selectedFruit" name="profilePicture" value="apple">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group" style="text-align: center; margin-top: 30px;">
+                <button type="submit" class="btn" style="width: 100%; padding: 15px; font-size: 18px;">
+                    🚀 Create Account
+                </button>
+            </div>
+
+            <div id="signupMessage" style="display: none; margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center;"></div>
+        </form>
+
+        <div style="text-align: center; margin-top: 30px; padding-top: 30px; border-top: 2px solid #e0e0e0;">
+            <p style="color: #666;">Already have an account?</p>
+            <a href="login.html" class="btn btn-secondary" style="margin-top: 10px;">Login Here</a>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <p style="color: #666;">Or continue as guest</p>
+            <a href="quiz.html" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                Take Quiz Without Account →
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
+        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+    </footer>
+
+    <script>
+        // Handle fruit selection
+        let selectedFruit = 'apple';
+        
+        document.querySelectorAll('.fruit-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all
+                document.querySelectorAll('.fruit-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked
+                this.classList.add('selected');
+                
+                // Update hidden input
+                selectedFruit = this.getAttribute('data-fruit');
+                document.getElementById('selectedFruit').value = selectedFruit;
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const profilePicture = selectedFruit;
+            
+            // Validation
+            if (!fullName || !username || !email || !password || !confirmPassword) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (username.length < 3 || username.length > 20) {
+                showMessage('Username must be 3-20 characters', 'error');
+                return;
+            }
+            
+            if (!/^[a-zA-Z0-9]+$/.test(username)) {
+                showMessage('Username can only contain letters and numbers', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match', 'error');
+                return;
+            }
+            
+            // Send registration request
+            try {
+                const response = await fetch('php/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: fullName,
+                        username: username,
+                        email: email,
+                        password: password,
+                        profile_picture: profilePicture
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('Account created successfully! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Registration failed. Please try again.', 'error');
+                console.error('Error:', error);
+            }
+        });
+        
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('signupMessage');
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = message;
+            
+            if (type === 'success') {
+                messageDiv.style.background = '#d4edda';
+                messageDiv.style.color = '#155724';
+                messageDiv.style.border = '1px solid #c3e6cb';
+            } else {
+                messageDiv.style.background = '#f8d7da';
+                messageDiv.style.color = '#721c24';
+                messageDiv.style.border = '1px solid #f5c6cb';
+            }
+            
+            // Scroll to message
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Real-time username validation
+        document.getElementById('username').addEventListener('input', function() {
+            const username = this.value;
+            if (username.length > 0 && !/^[a-zA-Z0-9]+$/.test(username)) {
+                this.style.borderColor = '#dc3545';
+            } else {
+                this.style.borderColor = '#e0e0e0';
+            }
+        });
+        
+        // Real-time password match validation
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            if (this.value && this.value !== password) {
+                this.style.borderColor = '#dc3545';
+            } else {
+                this.style.borderColor = '#28a745';
+            }
+        });
+    </script>
+</body>
+</html>

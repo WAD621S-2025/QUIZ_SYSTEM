@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - NamiQuiz</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-picture {
+            font-size: 100px;
+            margin-bottom: 15px;
+            display: inline-block;
+            background: white;
+            border-radius: 50%;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .category-progress {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-progress:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .progress-bar-container {
+            background: #e0e0e0;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .badge-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-in-progress {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-not-started {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .edit-profile-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid white;
+            padding: 10px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-profile-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">🎓 NamiQuiz</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-picture" id="profilePicture">🍎</div>
+            <h1 id="userName" style="margin: 15px 0 5px 0;">Loading...</h1>
+            <p id="userEmail" style="opacity: 0.9; margin-bottom: 10px;">user@example.com</p>
+            <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">
+                Member since <span id="joinDate">...</span>
+            </p>
+            <button class="edit-profile-btn" onclick="openEditModal()">✏️ Edit Profile</button>
+        </div>
+
+        <!-- Statistics Overview -->
+        <h2 style="color: #667eea; margin-bottom: 20px;">📊 Your Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalQuizzes">0</div>
+                <div class="stat-label">Quizzes Taken</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgScore">0%</div>
+                <div class="stat-label">Average Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="bestScore">0%</div>
+                <div class="stat-label">Best Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="categoriesCompleted">0</div>
+                <div class="stat-label">Categories Completed</div>
+            </div>
+        </div>
+
+        <!-- Category Progress -->
+        <h2 style="color: #667eea; margin: 40px 0 20px 0;">📚 Category Progress</h2>
+        <div id="categoryProgressContainer">
+            <!-- Will be populated dynamically -->
+        </div>
+
+        <!-- Incomplete Quizzes -->
+        <h2 style="color: #667eea; margin: 40px 0 20px 0;">⏸️ Continue Learning</h2>
+        <div id="incompleteQuizzesContainer">
+            <p style="text-align: center; color: #666; padding: 40px;">
+                No incomplete quizzes. Start a new quiz to begin learning!
+            </p>
+        </div>
+
+        <!-- Recent Activity -->
+        <h2 style="color: #667eea; margin: 40px 0 20px 0;">🕐 Recent Activity</h2>
+        <div id="recentActivityContainer">
+            <!-- Will be populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <h2 style="color: #667eea; margin-bottom: 30px;">Edit Profile</h2>
+            
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editFullName">Full Name</label>
+                    <input type="text" id="editFullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Choose Profile Picture</label>
+                    <div class="fruit-selector" id="editFruitSelector" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 15px 0;">
+                        <!-- Fruits will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn" style="width: 100%;">💾 Save Changes</button>
+                </div>
+            </form>
+            
+            <hr style="margin: 30px 0;">
+            
+            <h3 style="color: #667eea; margin-bottom: 20px;">Change Password</h3>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-secondary" style="width: 100%;">🔐 Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
+        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+    </footer>
+
+    <script>
+        const fruitEmojis = {
+            'apple': '🍎',
+            'banana': '🍌',
+            'orange': '🍊',
+            'grape': '🍇',
+            'watermelon': '🍉',
+            'strawberry': '🍓',
+            'pineapple': '🍍',
+            'mango': '🥭',
+            'peach': '🍑',
+            'cherry': '🍒',
+            'kiwi': '🥝',
+            'lemon': '🍋',
+            'avocado': '🥑',
+            'coconut': '🥥',
+            'pear': '🍐'
+        };
+        
+        let currentUser = null;
+        let selectedFruit = 'apple';
+
+        // Load user profile on page load
+        window.addEventListener('DOMContentLoaded', async function() {
+            await loadUserProfile();
+            await loadCategoryProgress();
+            await loadIncompleteQuizzes();
+            await loadRecentActivity();
+            populateFruitSelector();
+        });
+
+        async function loadUserProfile() {
+            try {
+                const response = await fetch('php/get_user_profile.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    displayUserProfile(currentUser);
+                } else {
+                    // User not logged in, redirect to login
+                    alert('Please login to view your profile');
+                    window.location.href = 'login.html';
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                alert('Failed to load profile. Please login again.');
+                window.location.href = 'login.html';
+            }
+        }
+
+        function displayUserProfile(user) {
+            document.getElementById('profilePicture').textContent = fruitEmojis[user.profile_picture] || '🍎';
+            document.getElementById('userName').textContent = user.full_name;
+            document.getElementById('userEmail').textContent = user.email;
+            
+            const joinDate = new Date(user.date_joined).toLocaleDateString('en-NA', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('joinDate').textContent = joinDate;
+            
+            // Display statistics
+            document.getElementById('totalQuizzes').textContent = user.total_quizzes || 0;
+            document.getElementById('avgScore').textContent = user.average_score ? user.average_score + '%' : '0%';
+            document.getElementById('bestScore').textContent = user.best_score ? user.best_score + '%' : '0%';
+            document.getElementById('categoriesCompleted').textContent = user.categories_completed || 0;
+        }
+
+        async function loadCategoryProgress() {
+            try {
+                const response = await fetch('php/get_category_progress.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayCategoryProgress(data.categories);
+                }
+            } catch (error) {
+                console.error('Error loading category progress:', error);
+            }
+        }
+
+        function displayCategoryProgress(categories) {
+            const container = document.getElementById('categoryProgressContainer');
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const progress = category.progress || 0;
+                const attempts = category.attempts || 0;
+                const bestScore = category.best_score || 0;
+                
+                let badge = '';
+                if (progress >= 100) {
+                    badge = '<span class="badge badge-completed">✓ Completed</span>';
+                } else if (progress > 0) {
+                    badge = '<span class="badge badge-in-progress">⏸️ In Progress</span>';
+                } else {
+                    badge = '<span class="badge badge-not-started">Not Started</span>';
+                }
+                
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category-progress';
+                categoryDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="color: #667eea; margin: 0;">${category.name}</h3>
+                        ${badge}
+                    </div>
+                    <p style="color: #666; font-size: 14px;">${category.description}</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: ${progress}%;">
+                            ${progress}%
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #666;">
+                        <span>Attempts: ${attempts}</span>
+                        <span>Best: ${bestScore}%</span>
+                    </div>
+                    <button onclick="startQuiz(${category.id})" class="btn" style="margin-top: 15px; width: 100%;">
+                        ${progress > 0 && progress < 100 ? '▶️ Continue' : progress >= 100 ? '🔄 Retake' : '🚀 Start'} Quiz
+                    </button>
+                `;
+                
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        async function loadIncompleteQuizzes() {
+            try {
+                const response = await fetch('php/get_incomplete_quizzes.php');
+                const data = await response.json();
+                
+                if (data.success && data.quizzes.length > 0) {
+                    displayIncompleteQuizzes(data.quizzes);
+                }
+            } catch (error) {
+                console.error('Error loading incomplete quizzes:', error);
+            }
+        }
+
+        function displayIncompleteQuizzes(quizzes) {
+            const container = document.getElementById('incompleteQuizzesContainer');
+            container.innerHTML = '';
+            
+            quizzes.forEach(quiz => {
+                const quizDiv = document.createElement('div');
+                quizDiv.className = 'category-progress';
+                quizDiv.innerHTML = `
+                    <h3 style="color: #667eea;">${quiz.category_name}</h3>
+                    <p style="color: #666;">
+                        Progress: Question ${quiz.current_question}/${quiz.total_questions} | 
+                        Score: ${quiz.score}/${quiz.current_question - 1}
+                    </p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: ${(quiz.current_question / quiz.total_questions) * 100}%;">
+                            ${Math.round((quiz.current_question / quiz.total_questions) * 100)}%
+                        </div>
+                    </div>
+                    <button onclick="continueQuiz(${quiz.category_id})" class="btn" style="margin-top: 15px;">
+                        ▶️ Continue Quiz
+                    </button>
+                `;
+                container.appendChild(quizDiv);
+            });
+        }
+
+        async function loadRecentActivity() {
+            try {
+                const response = await fetch('php/get_recent_activity.php');
+                const data = await response.json();
+                
+                if (data.success && data.activities.length > 0) {
+                    displayRecentActivity(data.activities);
+                } else {
+                    document.getElementById('recentActivityContainer').innerHTML = `
+                        <p style="text-align: center; color: #666; padding: 40px;">
+                            No recent activity. Start taking quizzes to see your progress here!
+                        </p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading recent activity:', error);
+            }
+        }
+
+        function displayRecentActivity(activities) {
+            const container = document.getElementById('recentActivityContainer');
+            container.innerHTML = '';
+            
+            activities.forEach(activity => {
+                const date = new Date(activity.attempt_date).toLocaleDateString('en-NA', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const percentage = Math.round((activity.score / activity.total_questions) * 100);
+                const color = percentage >= 70 ? '#28a745' : percentage >= 50 ? '#ffc107' : '#dc3545';
+                
+                const activityDiv = document.createElement('div');
+                activityDiv.style.cssText = `
+                    background: #f8f9fa;
+                    padding: 20px;
+                    border-radius: 10px;
+                    margin-bottom: 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                `;
+                activityDiv.innerHTML = `
+                    <div>
+                        <strong style="color: #667eea;">${activity.category_name}</strong>
+                        <div style="font-size: 14px; color: #666; margin-top: 5px;">${date}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 32px; font-weight: bold; color: ${color};">
+                            ${percentage}%
+                        </div>
+                        <div style="font-size: 14px; color: #666;">${activity.score}/${activity.total_questions}</div>
+                    </div>
+                `;
+                container.appendChild(activityDiv);
+            });
+        }
+
+        function populateFruitSelector() {
+            const selector = document.getElementById('editFruitSelector');
+            selector.innerHTML = '';
+            
+            Object.entries(fruitEmojis).forEach(([fruit, emoji]) => {
+                const fruitDiv = document.createElement('div');
+                fruitDiv.className = 'fruit-option';
+                fruitDiv.setAttribute('data-fruit', fruit);
+                fruitDiv.style.cssText = `
+                    cursor: pointer;
+                    text-align: center;
+                    padding: 10px;
+                    border: 2px solid transparent;
+                    border-radius: 10px;
+                    transition: all 0.3s ease;
+                    background: #f8f9fa;
+                `;
+                fruitDiv.innerHTML = `
+                    <span style="font-size: 36px;">${emoji}</span>
+                `;
+                
+                fruitDiv.addEventListener('click', function() {
+                    document.querySelectorAll('#editFruitSelector .fruit-option').forEach(opt => {
+                        opt.style.borderColor = 'transparent';
+                        opt.style.background = '#f8f9fa';
+                    });
+                    this.style.borderColor = '#667eea';
+                    this.style.background = '#e3e9ff';
+                    selectedFruit = fruit;
+                });
+                
+                selector.appendChild(fruitDiv);
+            });
+        }
+
+        function startQuiz(categoryId) {
+            window.location.href = `quiz.html?category=${categoryId}`;
+        }
+
+        function continueQuiz(categoryId) {
+            window.location.href = `quiz.html?category=${categoryId}&continue=true`;
+        }
+
+        function openEditModal() {
+            document.getElementById('editModal').style.display = 'block';
+            document.getElementById('editFullName').value = currentUser.full_name;
+            document.getElementById('editEmail').value = currentUser.email;
+            selectedFruit = currentUser.profile_picture;
+            
+            // Highlight current fruit
+            document.querySelectorAll('#editFruitSelector .fruit-option').forEach(opt => {
+                if (opt.getAttribute('data-fruit') === selectedFruit) {
+                    opt.style.borderColor = '#667eea';
+                    opt.style.background = '#e3e9ff';
+                }
+            });
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // Edit profile form submission
+        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('editFullName').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            
+            try {
+                const response = await fetch('php/update_profile.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        full_name: fullName,
+                        email: email,
+                        profile_picture: selectedFruit
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Profile updated successfully!');
+                    closeEditModal();
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                alert('Failed to update profile');
+                console.error('Error:', error);
+            }
+        });
+
+        // Change password form submission
+        document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            
+            if (newPassword !== confirmNewPassword) {
+                alert('New passwords do not match!');
+                return;
+            }
+            
+            try {
+                const response = await fetch('php/change_password.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Password changed successfully!');
+                    document.getElementById('changePasswordForm').reset();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                alert('Failed to change password');
+                console.error('Error:', error);
+            }
+        });
+
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    const response = await fetch('php/logout.php');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        window.location.href = 'index.html';
+                    }
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+    </script>
+</body>
+</html>

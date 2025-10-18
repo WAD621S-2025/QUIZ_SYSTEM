@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Namibian Learning Quiz System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">🎓 NamiQuiz</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" id="loginLink">Login</a></li>
+                <li><a href="signup.html" id="signupLink">Sign Up</a></li>
+                <li style="display: none;" id="profileLink"><a href="profile.html">My Profile</a></li>
+                <li style="display: none;" id="logoutLink"><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1 style="text-align: center; color: #667eea; margin-bottom: 30px;">Contact Us</h1>
+        
+        <p style="text-align: center; font-size: 18px; margin-bottom: 40px;">
+            We'd love to hear from you! Whether you have questions, feedback, or suggestions, 
+            feel free to reach out to us.
+        </p>
+
+        <!-- Contact Form -->
+        <div class="contact-form">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <input type="text" id="subject" name="subject" required placeholder="What is your message about?">
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
+                </div>
+
+                <div class="form-group" style="text-align: center;">
+                    <button type="submit" class="btn">Send Message</button>
+                </div>
+            </form>
+
+            <div id="formFeedback" style="display: none; margin-top: 20px; padding: 15px; border-radius: 10px; text-align: center;"></div>
+        </div>
+
+        <!-- Additional Information -->
+        <div style="margin-top: 60px;">
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">Other Ways to Reach Us</h2>
+            
+            <div class="category-grid" style="max-width: 800px; margin: 0 auto;">
+                <div class="category-card" style="cursor: default;">
+                    <h3>📧 Email</h3>
+                    <p style="margin-top: 10px;">support@namiquiz.na</p>
+                    <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">We'll respond within 24-48 hours</p>
+                </div>
+
+                <div class="category-card" style="cursor: default;">
+                    <h3>💬 Feedback</h3>
+                    <p style="margin-top: 10px;">feedback@namiquiz.na</p>
+                    <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">Share your ideas and suggestions</p>
+                </div>
+
+                <div class="category-card" style="cursor: default;">
+                    <h3>🐛 Report Issues</h3>
+                    <p style="margin-top: 10px;">bugs@namiquiz.na</p>
+                    <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">Found a bug? Let us know!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div style="margin-top: 60px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">Frequently Asked Questions</h2>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #667eea;">
+                <h3 style="color: #667eea;">Is NamiQuiz free to use?</h3>
+                <p style="margin-top: 10px;">
+                    Yes! NamiQuiz is completely free. No registration or payment is required. 
+                    Just visit the website and start learning!
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #667eea;">
+                <h3 style="color: #667eea;">Do I need to create an account?</h3>
+                <p style="margin-top: 10px;">
+                    No account is required. You can optionally enter your name to track your scores, 
+                    but it's not mandatory. We prioritize easy access for all learners.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #667eea;">
+                <h3 style="color: #667eea;">Can I retake quizzes?</h3>
+                <p style="margin-top: 10px;">
+                    Absolutely! You can take any quiz as many times as you want. Questions are 
+                    randomized each time, so every attempt is a new learning opportunity.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #667eea;">
+                <h3 style="color: #667eea;">Can teachers use this in classrooms?</h3>
+                <p style="margin-top: 10px;">
+                    Yes! Teachers are welcome to use NamiQuiz as a supplementary teaching tool 
+                    or for assessments. We encourage educational use in all forms.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #667eea;">
+                <h3 style="color: #667eea;">Will more categories be added?</h3>
+                <p style="margin-top: 10px;">
+                    We're constantly working to expand our question bank and add new categories. 
+                    If you have suggestions for topics, please contact us!
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #667eea;">
+                <h3 style="color: #667eea;">How can I contribute questions?</h3>
+                <p style="margin-top: 10px;">
+                    We welcome contributions from educators and experts! Send us your questions 
+                    via email at feedback@namiquiz.na, and we'll review them for inclusion.
+                </p>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin: 50px 0;">
+            <h2 style="color: white;">Haven't Tried a Quiz Yet?</h2>
+            <p style="font-size: 18px; margin: 20px 0;">
+                Experience the power of interactive learning today!
+            </p>
+            <a href="quiz.html" class="btn" style="background: white; color: #667eea;">Start Your First Quiz</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
+        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+    </footer>
+
+    <script>
+        // Handle contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Show success message
+            const feedback = document.getElementById('formFeedback');
+            feedback.style.display = 'block';
+            feedback.style.background = '#d4edda';
+            feedback.style.color = '#155724';
+            feedback.style.border = '1px solid #c3e6cb';
+            feedback.innerHTML = `
+                <h3>✅ Message Sent Successfully!</h3>
+                <p>Thank you, ${name}! We've received your message and will get back to you soon.</p>
+            `;
+            
+            // Clear form
+            document.getElementById('contactForm').reset();
+            
+            // Scroll to feedback
+            feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Note: In a real application, you would send this data to a server
+            // For now, we're just showing a success message
+            console.log('Form submitted:', { name, email, subject, message });
+        });
+    </script>
+</body>
+</html>

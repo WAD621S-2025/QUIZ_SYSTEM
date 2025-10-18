@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Namibian Learning Quiz System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">🎓 NamiQuiz</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" id="loginLink">Login</a></li>
+                <li><a href="signup.html" id="signupLink">Sign Up</a></li>
+                <li style="display: none;" id="profileLink"><a href="profile.html">My Profile</a></li>
+                <li style="display: none;" id="logoutLink"><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1 style="text-align: center; color: #667eea; margin-bottom: 30px;">About NamiQuiz</h1>
+        
+        <div style="line-height: 1.8; font-size: 18px;">
+            <h2 style="color: #667eea; margin-top: 30px;">🎯 Our Mission</h2>
+            <p>
+                NamiQuiz is a web-based educational platform designed to provide accessible, interactive, 
+                and engaging learning experiences for students and lifelong learners across Namibia. 
+                Our mission is to make learning fun, accessible, and effective through technology.
+            </p>
+
+            <h2 style="color: #667eea; margin-top: 30px;">🌟 Why NamiQuiz?</h2>
+            <p>
+                Traditional classroom instruction often lacks immediate feedback and interactive engagement. 
+                NamiQuiz addresses this gap by providing:
+            </p>
+            <ul style="margin-left: 30px; margin-top: 15px;">
+                <li><strong>Instant Feedback:</strong> Learn from your mistakes immediately with detailed explanations</li>
+                <li><strong>Culturally Relevant Content:</strong> Questions about Namibian history, culture, and context</li>
+                <li><strong>Self-Paced Learning:</strong> Study at your own pace, anytime, anywhere</li>
+                <li><strong>Progress Tracking:</strong> Monitor your improvement over time</li>
+                <li><strong>Free Access:</strong> No registration required - just start learning!</li>
+            </ul>
+
+            <h2 style="color: #667eea; margin-top: 30px;">📚 What You'll Learn</h2>
+            <p>Our platform covers five comprehensive categories:</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #764ba2;">🏛️ Namibian History (25 Questions)</h3>
+                <p>
+                    Explore Namibia's journey to independence, important historical figures like Sam Nujoma, 
+                    key events such as the Battle of Cuito Cuanavale, and the legacy of colonial rule. 
+                    Understand the struggle for freedom and the birth of a nation.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #764ba2;">🌍 Namibian Culture & Geography (25 Questions)</h3>
+                <p>
+                    Discover Namibia's diverse ethnic groups, languages, and traditions. Learn about 
+                    natural wonders like the Namib Desert, Etosha National Park, Fish River Canyon, 
+                    and the unique wildlife that calls Namibia home.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #764ba2;">💻 Computer Science Basics (20 Questions)</h3>
+                <p>
+                    Master fundamental technology concepts including HTML, CSS, JavaScript, databases, 
+                    and programming principles. Build a strong foundation in computer science that 
+                    prepares you for the digital future.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #764ba2;">🌟 General Knowledge (20 Questions)</h3>
+                <p>
+                    Expand your understanding of science, geography, biology, and everyday facts. 
+                    From planets and oceans to human anatomy and natural phenomena, broaden your 
+                    knowledge of the world around you.
+                </p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #764ba2;">🔢 Mathematics & Logic (20 Questions)</h3>
+                <p>
+                    Sharpen your mathematical reasoning and problem-solving skills. Practice arithmetic, 
+                    geometry, percentages, and logical thinking through engaging questions designed 
+                    to build confidence and competence.
+                </p>
+            </div>
+
+            <h2 style="color: #667eea; margin-top: 30px;">🎓 Who Is This For?</h2>
+            <ul style="margin-left: 30px; margin-top: 15px;">
+                <li><strong>Students:</strong> Supplement your school curriculum and prepare for examinations</li>
+                <li><strong>Teachers:</strong> Use as a teaching aid or assessment tool in the classroom</li>
+                <li><strong>General Public:</strong> Learn more about Namibian history and culture</li>
+                <li><strong>Tech Learners:</strong> Build foundational computer science knowledge</li>
+                <li><strong>Parents:</strong> Support your children's learning journey</li>
+            </ul>
+
+            <h2 style="color: #667eea; margin-top: 30px;">💡 How It Works</h2>
+            <ol style="margin-left: 30px; margin-top: 15px; line-height: 2;">
+                <li><strong>Choose a Category:</strong> Select from 5 different quiz topics</li>
+                <li><strong>Answer Questions:</strong> Complete multiple choice, true/false, and text input questions</li>
+                <li><strong>Get Instant Feedback:</strong> See correct answers and detailed explanations immediately</li>
+                <li><strong>Track Your Progress:</strong> View your scores and improvement over time</li>
+                <li><strong>Learn and Improve:</strong> Retake quizzes to reinforce your knowledge</li>
+            </ol>
+
+            <h2 style="color: #667eea; margin-top: 30px;">🚀 Our Vision</h2>
+            <p>
+                We envision a future where every Namibian learner has access to quality educational 
+                resources that are interactive, culturally relevant, and freely available. NamiQuiz 
+                is just the beginning - we plan to expand with more subjects, advanced features, 
+                and mobile applications to reach even more learners across the nation.
+            </p>
+
+            <h2 style="color: #667eea; margin-top: 30px;">🛠️ Technology Stack</h2>
+            <p>
+                NamiQuiz is built using modern web technologies to ensure reliability and performance:
+            </p>
+            <ul style="margin-left: 30px; margin-top: 15px;">
+                <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript for interactive user experience</li>
+                <li><strong>Backend:</strong> PHP for server-side logic and data processing</li>
+                <li><strong>Database:</strong> MySQL for efficient data storage and retrieval</li>
+                <li><strong>Design:</strong> Responsive design that works on desktop, tablet, and mobile devices</li>
+            </ul>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin: 40px 0;">
+                <h2 style="color: white;">Ready to Start Learning?</h2>
+                <p style="font-size: 18px; margin: 20px 0;">
+                    Join thousands of learners using NamiQuiz to expand their knowledge!
+                </p>
+                <a href="quiz.html" class="btn" style="background: white; color: #667eea;">Take Your First Quiz</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
+        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+    </footer>
+</body>
+</html>

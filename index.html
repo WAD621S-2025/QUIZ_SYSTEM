@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namibian Learning Quiz System - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">🎓 NamiQuiz</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" id="loginLink">Login</a></li>
+                <li><a href="signup.html" id="signupLink">Sign Up</a></li>
+                <li style="display: none;" id="profileLink"><a href="profile.html">My Profile</a></li>
+                <li style="display: none;" id="logoutLink"><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Welcome to NamiQuiz! 🇳🇦</h1>
+        <p>Test your knowledge on Namibian History, Culture, Computer Science, and more!</p>
+        <a href="quiz.html" class="btn">Start Learning Now</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h2 style="text-align: center; margin-bottom: 30px;">Why Choose NamiQuiz?</h2>
+        
+        <div class="category-grid">
+            <div class="category-card">
+                <h3>📚 110+ Questions</h3>
+                <p>Comprehensive question bank covering 5 different categories</p>
+            </div>
+            
+            <div class="category-card">
+                <h3>⚡ Instant Feedback</h3>
+                <p>Get immediate explanations for every answer to learn faster</p>
+            </div>
+            
+            <div class="category-card">
+                <h3>🎯 Multiple Formats</h3>
+                <p>Multiple choice, true/false, and text input questions</p>
+            </div>
+            
+            <div class="category-card">
+                <h3>📊 Track Progress</h3>
+                <p>Monitor your performance and improvement over time</p>
+            </div>
+        </div>
+
+        <h2 style="text-align: center; margin: 50px 0 30px 0;">Available Quiz Categories</h2>
+        
+        <div class="category-grid" id="categoriesGrid">
+            <!-- Categories will be loaded dynamically here -->
+            <div class="category-card" onclick="startQuiz(1)">
+                <h3>🏛️ Namibian History</h3>
+                <p>Learn about Namibia's independence struggle, historical events, and important figures</p>
+                <p style="margin-top: 15px; font-weight: bold;">25 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(2)">
+                <h3>🌍 Namibian Culture & Geography</h3>
+                <p>Explore Namibian traditions, languages, landmarks, and natural features</p>
+                <p style="margin-top: 15px; font-weight: bold;">25 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(3)">
+                <h3>💻 Computer Science Basics</h3>
+                <p>Fundamental concepts in programming, web development, and technology</p>
+                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(4)">
+                <h3>🌟 General Knowledge</h3>
+                <p>Science, world facts, and everyday knowledge</p>
+                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(5)">
+                <h3>🔢 Mathematics & Logic</h3>
+                <p>Mathematical reasoning, problem-solving, and logical thinking</p>
+                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px;">
+            <h2>Ready to Test Your Knowledge?</h2>
+            <p style="font-size: 18px; margin: 20px 0;">Choose a category and start learning today!</p>
+            <a href="quiz.html" class="btn">Take a Quiz Now</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
+        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+    </footer>
+
+    <script>
+        // Function to start quiz with selected category
+        function startQuiz(categoryId) {
+            window.location.href = 'quiz.html?category=' + categoryId;
+        }
+
+        // Optional: Load categories dynamically from database
+        // This can be uncommented later if you want dynamic loading
+        /*
+        async function loadCategories() {
+            try {
+                const response = await fetch('php/get_categories.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const grid = document.getElementById('categoriesGrid');
+                    grid.innerHTML = '';
+                    
+                    data.categories.forEach(category => {
+                        const card = document.createElement('div');
+                        card.className = 'category-card';
+                        card.onclick = () => startQuiz(category.id);
+                        card.innerHTML = `
+                            <h3>${category.name}</h3>
+                            <p>${category.description}</p>
+                            <p style="margin-top: 15px; font-weight: bold;">${category.question_count} Questions</p>
+                        `;
+                        grid.appendChild(card);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+        
+        // Load categories when page loads
+        window.addEventListener('DOMContentLoaded', loadCategories);
+        */
+    </script>
+</body>
+</html>
