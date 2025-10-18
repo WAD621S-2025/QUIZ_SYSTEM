@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Take Quizes - Namibian Learning Quiz System</title>
+    <title>Take Quiz - Namibian Learning Quiz System</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -81,7 +81,7 @@
             <div class="quiz-header">
                 <div>
                     <h2 id="categoryTitle" style="margin: 0; color: white;">Loading...</h2>
-                    <p id="userName Display" style="margin: 5px 0 0 0; opacity: 0.9;"></p>
+                    <p id="userNameDisplay" style="margin: 5px 0 0 0; opacity: 0.9;"></p>
                 </div>
                 <div style="text-align: right;">
                     <h3 id="questionCounter" style="margin: 0; color: white;">Question 1/20</h3>
@@ -143,6 +143,7 @@
         <p>Built with ❤️ for Namibian students and lifelong learners</p>
     </footer>
 
+    <script src="js/script.js"></script>
     <script>
         // Global variables
         let questions = [];
@@ -269,7 +270,11 @@
 
         async function startQuiz(catId) {
             categoryId = catId;
-            userName = document.getElementById('userName').value.trim() || 'Anonymous';
+            
+            // Get username from input or use logged-in user's name
+            if (!isLoggedIn) {
+                userName = document.getElementById('userName').value.trim() || 'Anonymous';
+            }
             
             // Show loading screen
             document.getElementById('categorySelection').style.display = 'none';
@@ -296,6 +301,11 @@
                     // Set category title
                     document.getElementById('categoryTitle').textContent = categoryName;
                     document.getElementById('userNameDisplay').textContent = `Welcome, ${userName}!`;
+                    
+                    // Start auto-save if logged in
+                    if (isLoggedIn) {
+                        startAutoSave();
+                    }
                     
                     // Load first question
                     loadQuestion();
@@ -612,25 +622,6 @@
                 if (isLoggedIn) {
                     saveProgress();
                 }
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });: categoryName,
-                categoryId: categoryId,
-                userName: userName,
-                userAnswers: userAnswers,
-                questions: questions
-            };
-
-            sessionStorage.setItem('quizResults', JSON.stringify(results));
-
-            // Redirect to results page
-            window.location.href = 'results.html';
-        }
-
-        // Prevent accidental page refresh
-        window.addEventListener('beforeunload', function(e) {
-            if (questions.length > 0 && currentQuestionIndex < questions.length) {
                 e.preventDefault();
                 e.returnValue = '';
             }
