@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NamiQuiz - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="home.html" class="logo">🎓 NamiQuiz</a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1 id="welcomeTitle">Welcome back! 🇳🇦</h1>
+        <p>Continue your learning journey with NamiQuiz</p>
+        <a href="quiz.html" class="btn">Start Learning Now</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h2 style="text-align: center; margin-bottom: 30px;">Why Choose NamiQuiz?</h2>
+        
+        <div class="category-grid">
+            <div class="category-card">
+                <h3>📚 110+ Questions</h3>
+                <p>Comprehensive question bank covering 5 different categories</p>
+            </div>
+            
+            <div class="category-card">
+                <h3>⚡ Instant Feedback</h3>
+                <p>Get immediate explanations for every answer to learn faster</p>
+            </div>
+            
+            <div class="category-card">
+                <h3>🎯 Multiple Formats</h3>
+                <p>Multiple choice, true/false, and text input questions</p>
+            </div>
+            
+            <div class="category-card">
+                <h3>📊 Track Progress</h3>
+                <p>Monitor your performance and improvement over time</p>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div id="quickStats" style="display: none; margin: 40px 0;">
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">Your Quick Stats</h2>
+            <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 32px; color: #667eea; font-weight: bold;" id="totalQuizzes">0</div>
+                    <div style="color: #666;">Quizzes Completed</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 32px; color: #28a745; font-weight: bold;" id="avgScore">0%</div>
+                    <div style="color: #666;">Average Score</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 32px; color: #ffc107; font-weight: bold;" id="bestScore">0%</div>
+                    <div style="color: #666;">Best Score</div>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="text-align: center; margin: 50px 0 30px 0;">Available Quiz Categories</h2>
+        
+        <div class="category-grid" id="categoriesGrid">
+            <div class="category-card" onclick="startQuiz(1)">
+                <h3>🏛️ Namibian History</h3>
+                <p>Learn about Namibia's independence struggle, historical events, and important figures</p>
+                <p style="margin-top: 15px; font-weight: bold;">25 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(2)">
+                <h3>🌍 Namibian Culture & Geography</h3>
+                <p>Explore Namibian traditions, languages, landmarks, and natural features</p>
+                <p style="margin-top: 15px; font-weight: bold;">25 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(3)">
+                <h3>💻 Computer Science Basics</h3>
+                <p>Fundamental concepts in programming, web development, and technology</p>
+                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(4)">
+                <h3>🌟 General Knowledge</h3>
+                <p>Science, world facts, and everyday knowledge</p>
+                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
+            </div>
+            
+            <div class="category-card" onclick="startQuiz(5)">
+                <h3>🔢 Mathematics & Logic</h3>
+                <p>Mathematical reasoning, problem-solving, and logical thinking</p>
+                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px;">
+            <h2>Ready to Test Your Knowledge?</h2>
+            <p style="font-size: 18px; margin: 20px 0;">Choose a category and start learning today!</p>
+            <a href="quiz.html" class="btn">Take a Quiz Now</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
+        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        let currentUser = null;
+
+        // Check authentication on page load
+        window.addEventListener('DOMContentLoaded', async function() {
+            await checkAuth();
+            await loadQuickStats();
+        });
+
+        // Check if user is logged in
+        async function checkAuth() {
+            try {
+                const response = await fetch('php/get_user_profile.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    document.getElementById('welcomeTitle').textContent = 
+                        `Welcome back, ${data.user.full_name}! 🇳🇦`;
+                } else {
+                    // Not logged in, redirect to landing page
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Load quick stats
+        async function loadQuickStats() {
+            try {
+                const response = await fetch('php/get_user_stats.php');
+                const data = await response.json();
+                
+                if (data.success && data.stats) {
+                    document.getElementById('quickStats').style.display = 'block';
+                    document.getElementById('totalQuizzes').textContent = data.stats.total_quizzes || 0;
+                    document.getElementById('avgScore').textContent = (data.stats.average_score || 0) + '%';
+                    document.getElementById('bestScore').textContent = (data.stats.best_score || 0) + '%';
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Function to start quiz with selected category
+        function startQuiz(categoryId) {
+            window.location.href = 'quiz.html?category=' + categoryId;
+        }
+
+        // Logout function
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await fetch('php/logout.php');
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

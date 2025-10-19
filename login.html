@@ -12,10 +12,7 @@
         <div class="container">
             <a href="index.html" class="logo">🎓 NamiQuiz</a>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="quiz.html">Take Quiz</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li><a href="index.html">Back</a></li>
                 <li><a href="signup.html">Sign Up</a></li>
             </ul>
         </div>
@@ -54,13 +51,6 @@
             <p style="color: #666;">Don't have an account?</p>
             <a href="signup.html" class="btn btn-secondary" style="margin-top: 10px;">Create Account</a>
         </div>
-
-        <div style="text-align: center; margin-top: 20px;">
-            <p style="color: #666;">Or continue as guest</p>
-            <a href="quiz.html" style="color: #667eea; text-decoration: none; font-weight: 600;">
-                Take Quiz Without Account →
-            </a>
-        </div>
     </div>
 
     <!-- Footer -->
@@ -69,7 +59,23 @@
         <p>Built with ❤️ for Namibian students and lifelong learners</p>
     </footer>
 
+    <script src="js/script.js"></script>
     <script>
+        // Check if already logged in
+        window.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const response = await fetch('php/get_user_profile.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Already logged in, redirect to home
+                    window.location.href = 'home.html';
+                }
+            } catch (error) {
+                // Not logged in, stay on login page
+            }
+        });
+
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -96,10 +102,10 @@
                 if (data.success) {
                     showMessage('Login successful! Redirecting...', 'success');
                     setTimeout(() => {
-                        window.location.href = 'profile.html';
-                    }, 1500);
+                        window.location.href = 'home.html';
+                    }, 1000);
                 } else {
-                    showMessage(data.message, 'error');
+                    showMessage(data.message || 'Invalid username or password', 'error');
                 }
             } catch (error) {
                 showMessage('Login failed. Please try again.', 'error');
