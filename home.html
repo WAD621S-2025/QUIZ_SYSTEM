@@ -10,92 +10,250 @@
     <!-- Navigation Bar -->
     <nav>
         <div class="container">
-            <a href="home.html" class="logo">🎓 NamiQuiz</a>
+            <a href="home.html" class="logo">
+                NamiQuiz
+                <span class="logo-dot"></span>
+            </a>
             <ul class="nav-links">
                 <li><a href="home.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="quiz.html">Take Quiz</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="profile.html">My Profile</a></li>
-                <li><a href="#" onclick="logout(event)" style="color: #FF006E; font-weight: 800;">🚪 Logout</a></li>
+                <li><a href="#" onclick="logout(event)" style="color: #ec4899; font-weight: 800;">🚪 Logout</a></li>
             </ul>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span class="sun">☀️</span>
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Floating Books -->
     <div class="hero">
-        <h1 id="welcomeTitle">Welcome back! 🇳🇦</h1>
-        <p>Continue your learning journey with NamiQuiz</p>
-        <a href="quiz.html" class="btn">Start Learning Now</a>
+        <!-- Floating illustrations -->
+        <div class="floating-illustrations">
+            <div class="book book-1"></div>
+            <div class="book book-2"></div>
+            <div class="book book-3"></div>
+            <div class="book book-4"></div>
+            <div class="book book-5"></div>
+            <div class="pencil pencil-1"></div>
+            <div class="pencil pencil-2"></div>
+            <div class="pencil pencil-3"></div>
+        </div>
+        
+        <div class="hero-inner">
+            <div>
+                <h1 id="welcomeTitle">Welcome back! 🇳🇦</h1>
+                <p>Continue your learning journey with NamiQuiz - Your gateway to knowledge and success!</p>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
+                    <a href="quiz.html" class="btn">🚀 Start Learning Now</a>
+                    <a href="#categories" class="btn" style="background: linear-gradient(135deg, #3b82f6, #14b8a6);">📚 Browse Categories</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Main Content -->
-    <div class="content">
-        <h2 style="text-align: center; margin-bottom: 30px;">Your Learning Dashboard</h2>
+    <div class="container">
         
-        <!-- Quick Stats -->
-        <div id="quickStats" style="margin: 40px 0;">
-            <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #667eea;">
-                    <div style="font-size: 48px; color: #667eea; font-weight: bold;" id="totalQuizzes">0</div>
-                    <div style="color: #666;">Quizzes Completed</div>
+        <!-- Quick Stats Section -->
+        <div class="content" style="margin-top: 40px;">
+            <h2 style="text-align: center; margin-bottom: 32px;">📊 Your Learning Progress</h2>
+            
+            <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                <div class="category-card" style="cursor: default;">
+                    <div style="font-size: 56px; margin-bottom: 12px;">🎯</div>
+                    <div style="font-size: 42px; font-weight: 900; margin-bottom: 8px;" id="totalQuizzes">0</div>
+                    <div style="color: var(--text-secondary); font-weight: 700;">Quizzes Completed</div>
                 </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #28a745;">
-                    <div style="font-size: 48px; color: #28a745; font-weight: bold;" id="avgScore">0%</div>
-                    <div style="color: #666;">Average Score</div>
+                <div class="category-card" style="cursor: default;">
+                    <div style="font-size: 56px; margin-bottom: 12px;">📈</div>
+                    <div style="font-size: 42px; font-weight: 900; margin-bottom: 8px;" id="avgScore">0%</div>
+                    <div style="color: var(--text-secondary); font-weight: 700;">Average Score</div>
                 </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #ffc107;">
-                    <div style="font-size: 48px; color: #ffc107; font-weight: bold;" id="bestScore">0%</div>
-                    <div style="color: #666;">Best Score</div>
+                <div class="category-card" style="cursor: default;">
+                    <div style="font-size: 56px; margin-bottom: 12px;">🏆</div>
+                    <div style="font-size: 42px; font-weight: 900; margin-bottom: 8px;" id="bestScore">0%</div>
+                    <div style="color: var(--text-secondary); font-weight: 700;">Best Score</div>
+                </div>
+                <div class="category-card" style="cursor: default;">
+                    <div style="font-size: 56px; margin-bottom: 12px;">🔥</div>
+                    <div style="font-size: 42px; font-weight: 900; margin-bottom: 8px;" id="streakDays">0</div>
+                    <div style="color: var(--text-secondary); font-weight: 700;">Day Streak</div>
                 </div>
             </div>
         </div>
 
-        <h2 style="text-align: center; margin: 50px 0 30px 0;">Available Quiz Categories</h2>
-        
-        <div class="category-grid" id="categoriesGrid">
-            <div class="category-card" onclick="startQuiz(1)">
-                <h3>🏛️ Namibian History</h3>
-                <p>Learn about Namibia's independence struggle, historical events, and important figures</p>
-                <p style="margin-top: 15px; font-weight: bold;">25 Questions</p>
-            </div>
+        <!-- Featured Categories Section -->
+        <div class="content" id="categories">
+            <h2 style="text-align: center; margin-bottom: 16px;">🎓 Available Quiz Categories</h2>
+            <p style="text-align: center; color: var(--text-secondary); font-size: 18px; margin-bottom: 36px;">
+                Choose from our exciting collection of quizzes and start mastering new topics today!
+            </p>
             
-            <div class="category-card" onclick="startQuiz(2)">
-                <h3>🌍 Namibian Culture & Geography</h3>
-                <p>Explore Namibian traditions, languages, landmarks, and natural features</p>
-                <p style="margin-top: 15px; font-weight: bold;">25 Questions</p>
-            </div>
-            
-            <div class="category-card" onclick="startQuiz(3)">
-                <h3>💻 Computer Science Basics</h3>
-                <p>Fundamental concepts in programming, web development, and technology</p>
-                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
-            </div>
-            
-            <div class="category-card" onclick="startQuiz(4)">
-                <h3>🌟 General Knowledge</h3>
-                <p>Science, world facts, and everyday knowledge</p>
-                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
-            </div>
-            
-            <div class="category-card" onclick="startQuiz(5)">
-                <h3>🔢 Mathematics & Logic</h3>
-                <p>Mathematical reasoning, problem-solving, and logical thinking</p>
-                <p style="margin-top: 15px; font-weight: bold;">20 Questions</p>
+            <div class="category-grid" id="categoriesGrid">
+                <div class="category-card" onclick="startQuiz(1)">
+                    <div style="font-size: 64px; margin-bottom: 16px;">🏛️</div>
+                    <h3>Namibian History</h3>
+                    <p>Learn about Namibia's independence struggle, historical events, and important figures</p>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 2px solid rgba(168,85,247,0.1);">
+                        <p style="font-weight: 800; color: var(--primary);">📝 25 Questions</p>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="startQuiz(2)">
+                    <div style="font-size: 64px; margin-bottom: 16px;">🌍</div>
+                    <h3>Culture & Geography</h3>
+                    <p>Explore Namibian traditions, languages, landmarks, and natural features</p>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 2px solid rgba(59,130,246,0.1);">
+                        <p style="font-weight: 800; color: var(--accent);">📝 25 Questions</p>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="startQuiz(3)">
+                    <div style="font-size: 64px; margin-bottom: 16px;">💻</div>
+                    <h3>Computer Science</h3>
+                    <p>Fundamental concepts in programming, web development, and technology</p>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 2px solid rgba(34,197,94,0.1);">
+                        <p style="font-weight: 800; color: var(--success);">📝 20 Questions</p>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="startQuiz(4)">
+                    <div style="font-size: 64px; margin-bottom: 16px;">🌟</div>
+                    <h3>General Knowledge</h3>
+                    <p>Science, world facts, and everyday knowledge to expand your horizons</p>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 2px solid rgba(251,191,36,0.1);">
+                        <p style="font-weight: 800; color: var(--yellow);">📝 20 Questions</p>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="startQuiz(5)">
+                    <div style="font-size: 64px; margin-bottom: 16px;">🔢</div>
+                    <h3>Mathematics & Logic</h3>
+                    <p>Mathematical reasoning, problem-solving, and logical thinking challenges</p>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 2px solid rgba(236,72,153,0.1);">
+                        <p style="font-weight: 800; color: var(--accent-2);">📝 20 Questions</p>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="alert('Coming Soon! 🎉')">
+                    <div style="font-size: 64px; margin-bottom: 16px;">✨</div>
+                    <h3>More Coming Soon!</h3>
+                    <p>We're constantly adding new categories and questions. Stay tuned!</p>
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 2px solid rgba(168,85,247,0.1);">
+                        <p style="font-weight: 800; color: var(--muted);">🚀 In Development</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div style="text-align: center; margin-top: 50px;">
-            <h2>Ready to Test Your Knowledge?</h2>
-            <p style="font-size: 18px; margin: 20px 0;">Choose a category and start learning today!</p>
-            <a href="quiz.html" class="btn">Take a Quiz Now</a>
+        <!-- Why Choose NamiQuiz Section -->
+        <div class="content">
+            <h2 style="text-align: center; margin-bottom: 36px;">✨ Why Choose NamiQuiz?</h2>
+            
+            <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+                <div style="text-align: center; padding: 24px;">
+                    <div style="font-size: 72px; margin-bottom: 16px;">🎯</div>
+                    <h3 style="margin-bottom: 12px; font-size: 22px;">Targeted Learning</h3>
+                    <p style="color: var(--text-secondary);">Focus on what matters most with carefully curated questions</p>
+                </div>
+                
+                <div style="text-align: center; padding: 24px;">
+                    <div style="font-size: 72px; margin-bottom: 16px;">📊</div>
+                    <h3 style="margin-bottom: 12px; font-size: 22px;">Track Progress</h3>
+                    <p style="color: var(--text-secondary);">Monitor your improvement with detailed statistics and analytics</p>
+                </div>
+                
+                <div style="text-align: center; padding: 24px;">
+                    <div style="font-size: 72px; margin-bottom: 16px;">🇳🇦</div>
+                    <h3 style="margin-bottom: 12px; font-size: 22px;">Namibian Focus</h3>
+                    <p style="color: var(--text-secondary);">Content tailored for Namibian students and learners</p>
+                </div>
+                
+                <div style="text-align: center; padding: 24px;">
+                    <div style="font-size: 72px; margin-bottom: 16px;">⚡</div>
+                    <h3 style="margin-bottom: 12px; font-size: 22px;">Instant Feedback</h3>
+                    <p style="color: var(--text-secondary);">Get immediate results and explanations for every question</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="content">
+            <h2 style="text-align: center; margin-bottom: 32px;">📅 Recent Activity</h2>
+            <div id="recentActivity">
+                <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                    Complete your first quiz to see your activity here! 🎉
+                </p>
+            </div>
+        </div>
+
+        <!-- Quick Tips Section -->
+        <div class="content" style="background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(236,72,153,0.05)); border: 3px solid var(--primary);">
+            <h2 style="text-align: center; margin-bottom: 32px;">💡 Quick Tips for Success</h2>
+            
+            <div style="display: grid; gap: 24px; max-width: 800px; margin: 0 auto;">
+                <div style="display: flex; align-items: start; gap: 16px;">
+                    <div style="font-size: 32px; flex-shrink: 0;">1️⃣</div>
+                    <div>
+                        <h3 style="font-size: 20px; margin-bottom: 8px;">Read Carefully</h3>
+                        <p style="color: var(--text-secondary);">Take your time to read each question thoroughly before answering</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: start; gap: 16px;">
+                    <div style="font-size: 32px; flex-shrink: 0;">2️⃣</div>
+                    <div>
+                        <h3 style="font-size: 20px; margin-bottom: 8px;">Practice Regularly</h3>
+                        <p style="color: var(--text-secondary);">Consistency is key! Try to complete at least one quiz per day</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: start; gap: 16px;">
+                    <div style="font-size: 32px; flex-shrink: 0;">3️⃣</div>
+                    <div>
+                        <h3 style="font-size: 20px; margin-bottom: 8px;">Review Your Mistakes</h3>
+                        <p style="color: var(--text-secondary);">Learn from incorrect answers to improve your knowledge</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: start; gap: 16px;">
+                    <div style="font-size: 32px; flex-shrink: 0;">4️⃣</div>
+                    <div>
+                        <h3 style="font-size: 20px; margin-bottom: 8px;">Challenge Yourself</h3>
+                        <p style="color: var(--text-secondary);">Try different categories to broaden your knowledge base</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div style="text-align: center; margin: 60px 0;">
+            <div style="background: linear-gradient(135deg, var(--primary), var(--accent-2)); padding: 60px 40px; border-radius: 32px; box-shadow: 0 20px 60px rgba(168,85,247,0.3);">
+                <h2 style="color: white; font-size: 42px; margin-bottom: 16px;">Ready to Test Your Knowledge? 🚀</h2>
+                <p style="color: rgba(255,255,255,0.9); font-size: 20px; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Choose a category above and start your learning adventure today!
+                </p>
+                <a href="quiz.html" class="btn" style="background: white; color: var(--primary); box-shadow: 0 8px 24px rgba(0,0,0,0.2); font-size: 20px; padding: 18px 40px;">
+                    🎓 Take a Quiz Now
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Namibian Learning Quiz System. Empowering learners across Namibia.</p>
-        <p>Built with ❤️ for Namibian students and lifelong learners</p>
+        <div style="margin-bottom: 16px;">
+            <a href="home.html" style="color: var(--primary); text-decoration: none; font-weight: 800; margin: 0 12px;">Home</a>
+            <a href="about.html" style="color: var(--primary); text-decoration: none; font-weight: 800; margin: 0 12px;">About</a>
+            <a href="quiz.html" style="color: var(--primary); text-decoration: none; font-weight: 800; margin: 0 12px;">Quiz</a>
+            <a href="contact.html" style="color: var(--primary); text-decoration: none; font-weight: 800; margin: 0 12px;">Contact</a>
+        </div>
+        <p>&copy; 2025 NamiQuiz - Namibian Learning Platform</p>
+        <p style="margin-top: 8px;">Empowering learners across Namibia 🇳🇦</p>
+        <p style="margin-top: 8px;">Built with ❤️ for Namibian students and lifelong learners</p>
     </footer>
 
     <script src="js/script.js"></script>
@@ -107,6 +265,7 @@
             const isAuthenticated = await checkAuth();
             if (isAuthenticated) {
                 await loadQuickStats();
+                await loadRecentActivity();
             }
         });
 
@@ -143,15 +302,90 @@
                     document.getElementById('totalQuizzes').textContent = data.user.total_quizzes || 0;
                     document.getElementById('avgScore').textContent = Math.round(data.user.average_score || 0) + '%';
                     document.getElementById('bestScore').textContent = Math.round(data.user.best_score || 0) + '%';
+                    
+                    // Calculate streak (mock calculation - you can implement real streak tracking)
+                    const streak = Math.min(data.user.total_quizzes || 0, 30);
+                    document.getElementById('streakDays').textContent = streak;
                 }
             } catch (error) {
                 console.error('Error loading stats:', error);
             }
         }
 
+        // Load recent activity
+        async function loadRecentActivity() {
+            try {
+                const response = await fetch('php/get_recent_attempts.php?limit=5');
+                const data = await response.json();
+                
+                const activityContainer = document.getElementById('recentActivity');
+                
+                if (data.success && data.attempts && data.attempts.length > 0) {
+                    let html = '<div style="display: grid; gap: 16px;">';
+                    
+                    data.attempts.forEach(attempt => {
+                        const date = new Date(attempt.attempt_date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        });
+                        
+                        const scoreColor = attempt.score >= 80 ? 'var(--success)' : 
+                                         attempt.score >= 60 ? 'var(--warning)' : 'var(--danger)';
+                        
+                        html += `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: var(--card); border-radius: 16px; border-left: 4px solid ${scoreColor}; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                                <div>
+                                    <h3 style="font-size: 18px; margin-bottom: 6px;">${attempt.category_name || 'Quiz'}</h3>
+                                    <p style="color: var(--text-secondary); font-size: 14px;">📅 ${date}</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 28px; font-weight: 900; color: ${scoreColor};">${Math.round(attempt.score)}%</div>
+                                    <p style="color: var(--text-secondary); font-size: 14px;">${attempt.correct_answers}/${attempt.total_questions} correct</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                    activityContainer.innerHTML = html;
+                } else {
+                    activityContainer.innerHTML = `
+                        <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                            Complete your first quiz to see your activity here! 🎉
+                        </p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading recent activity:', error);
+            }
+        }
+
         // Function to start quiz with selected category
         function startQuiz(categoryId) {
             window.location.href = 'quiz.html?category=' + categoryId;
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            const toggle = document.querySelector('.theme-toggle');
+            if (isDark) {
+                toggle.innerHTML = '<span class="moon">🌙</span>';
+            } else {
+                toggle.innerHTML = '<span class="sun">☀️</span>';
+            }
+            
+            // Save preference
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Load theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.querySelector('.theme-toggle').innerHTML = '<span class="moon">🌙</span>';
         }
 
         // Logout function
