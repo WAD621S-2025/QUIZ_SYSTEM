@@ -44,6 +44,13 @@
                 </button>
             </div>
 
+            <!-- FORGOT PASSWORD LINK (Updated) -->
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="reset_password.html" style="color: #667eea; text-decoration: none; font-size: 14px;">
+                    🔑 Forgot Password?
+                </a>
+            </div>
+
             <div id="loginMessage" style="display: none; margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center;"></div>
         </form>
 
@@ -59,6 +66,7 @@
         <p>Built with ❤️ for Namibian students and lifelong learners</p>
     </footer>
 
+    <script src="js/script.js"></script>
     <script>
         // Check if already logged in
         window.addEventListener('DOMContentLoaded', async function() {
@@ -71,7 +79,6 @@
                     window.location.href = 'home.html';
                 }
             } catch (error) {
-                // Not logged in, stay on login page
                 console.log('Not logged in - showing login form');
             }
         });
@@ -98,22 +105,15 @@
             try {
                 const response = await fetch('php/login.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        username: username, 
-                        password: password 
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
                     showMessage('Login successful! Redirecting...', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'home.html';
-                    }, 1000);
+                    setTimeout(() => window.location.href = 'home.html', 1000);
                 } else {
                     showMessage(data.message || 'Invalid username or password', 'error');
                     submitBtn.disabled = false;
@@ -131,7 +131,6 @@
             const messageDiv = document.getElementById('loginMessage');
             messageDiv.style.display = 'block';
             messageDiv.textContent = message;
-            
             if (type === 'success') {
                 messageDiv.style.background = '#d4edda';
                 messageDiv.style.color = '#155724';
