@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Take Quiz - Namibian Learning Quiz System</title>
+    <title>Take Quiz - NamiQuiz</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,15 +11,15 @@
     <nav>
         <div class="container">
             <a href="index.html" class="logo">🎓 NamiQuiz</a>
-            <ul class="nav-links" id="navLinks">
+            <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="quiz.html">Take Quiz</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="login.html" id="loginLink">Login</a></li>
-                <li><a href="signup.html" id="signupLink">Sign Up</a></li>
-                <li style="display: none;" id="profileLink"><a href="profile.html">My Profile</a></li>
-                <li style="display: none;" id="logoutLink"><a href="#" onclick="logoutUser()">Logout</a></li>
+                <li id="loginLinkLi"><a href="login.html">Login</a></li>
+                <li id="signupLinkLi"><a href="signup.html">Sign Up</a></li>
+                <li id="profileLink" style="display: none;"><a href="profile.html">My Profile</a></li>
+                <li id="logoutLinkLi" style="display: none;"><a href="#" onclick="logout(event)" style="color: #FF006E; font-weight: 800;">🚪 Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -30,14 +30,14 @@
         <div id="categorySelection" class="quiz-container">
             <h1 style="text-align: center; color: #667eea; margin-bottom: 30px;">Select a Quiz Category</h1>
             
-            <!-- Optional Name Input -->
-            <div style="max-width: 500px; margin: 0 auto 40px;">
+            <!-- Optional Name Input (ONLY FOR GUESTS) -->
+            <div id="guestNameInput" style="max-width: 500px; margin: 0 auto 40px; display: none;">
                 <div class="form-group">
                     <label for="userName" style="font-size: 18px;">Enter Your Name (Optional)</label>
                     <input type="text" id="userName" placeholder="Your name here..." 
                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px;">
                     <p style="font-size: 14px; color: #666; margin-top: 8px;">
-                        💡 Enter your name to track your progress, or leave blank to remain anonymous
+                        💡 Enter your name to track your progress
                     </p>
                 </div>
             </div>
@@ -99,9 +99,7 @@
                 <div class="question-text" id="questionText">Loading question...</div>
                 
                 <!-- Answer Options Container -->
-                <div id="answerContainer">
-                    <!-- Will be dynamically populated -->
-                </div>
+                <div id="answerContainer"></div>
 
                 <!-- Feedback Box -->
                 <div class="feedback-box" id="feedbackBox">
@@ -143,7 +141,7 @@
         <p>Built with ❤️ for Namibian students and lifelong learners</p>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script src="js/nav-handler.js"></script>
     <script>
         // Global variables
         let questions = [];
@@ -166,105 +164,32 @@
             
             const urlParams = new URLSearchParams(window.location.search);
             const category = urlParams.get('category');
-            const continueQuiz = urlParams.get('continue');
             
             if (category) {
-                if (continueQuiz === 'true' && isLoggedIn) {
-                    // Try to load saved progress
-                    await loadSavedProgress(parseInt(category));
-                } else {
-                    // Start new quiz
-                    setTimeout(() => startQuiz(parseInt(category)), 100);
-                }
+                setTimeout(() => startQuiz(parseInt(category)), 100);
             }
         });
 
         // Check if user is logged in
         async function checkLoginStatus() {
             try {
-                const response = await fetch('php/get_user_profile.php');
+                const response = await fetch('php/check_login_status.php');
                 const data = await response.json();
                 
-                if (data.success) {
+                if (data.success && data.isLoggedIn) {
                     isLoggedIn = true;
                     userId = data.user.id;
                     userName = data.user.full_name;
-                    document.getElementById('loginLink').style.display = 'none';
-                    document.getElementById('signupLink').style.display = 'none';
-                    document.getElementById('profileLink').style.display = 'block';
-                    document.getElementById('logoutLink').style.display = 'block';
+                    // Don't show name input for logged-in users
                 } else {
                     isLoggedIn = false;
+                    // Show name input for guests
+                    document.getElementById('guestNameInput').style.display = 'block';
                 }
             } catch (error) {
                 isLoggedIn = false;
-                console.log('Not logged in');
-            }
-        }
-
-        async function logoutUser() {
-            if (confirm('Are you sure you want to logout? Your current progress will be saved.')) {
-                if (isLoggedIn && questions.length > 0 && currentQuestionIndex < questions.length) {
-                    await saveProgress();
-                }
-                await fetch('php/logout.php');
-                window.location.href = 'index.html';
-            }
-        }
-
-        // Load saved progress
-        async function loadSavedProgress(catId) {
-            try {
-                const response = await fetch(`php/get_incomplete_quizzes.php`);
-                const data = await response.json();
-                
-                if (data.success && data.quizzes.length > 0) {
-                    const savedQuiz = data.quizzes.find(q => q.category_id === catId);
-                    
-                    if (savedQuiz) {
-                        // Ask user if they want to continue
-                        const continueConfirm = confirm(
-                            `You have a saved quiz in ${savedQuiz.category_name}.\n` +
-                            `Question ${savedQuiz.current_question}/${savedQuiz.total_questions}\n\n` +
-                            `Continue from where you left off?`
-                        );
-                        
-                        if (continueConfirm) {
-                            // Load the saved state
-                            categoryId = savedQuiz.category_id;
-                            currentQuestionIndex = savedQuiz.current_question;
-                            score = savedQuiz.score;
-                            
-                            // Get questions and user answers from saved data
-                            const savedProgress = await fetch(`php/get_saved_quiz_data.php?user_id=${userId}&category_id=${catId}`);
-                            const progressData = await savedProgress.json();
-                            
-                            if (progressData.success) {
-                                questions = JSON.parse(progressData.data.questions_data);
-                                userAnswers = JSON.parse(progressData.data.user_answers);
-                                categoryName = savedQuiz.category_name;
-                                
-                                // Show quiz interface
-                                document.getElementById('categorySelection').style.display = 'none';
-                                document.getElementById('quizInterface').style.display = 'block';
-                                document.getElementById('categoryTitle').textContent = categoryName;
-                                document.getElementById('userNameDisplay').textContent = `Welcome back, ${userName}!`;
-                                
-                                // Start auto-save
-                                startAutoSave();
-                                
-                                loadQuestion();
-                                return;
-                            }
-                        }
-                    }
-                }
-                
-                // If no saved progress or user chose not to continue, start new quiz
-                startQuiz(catId);
-            } catch (error) {
-                console.error('Error loading saved progress:', error);
-                startQuiz(catId);
+                document.getElementById('guestNameInput').style.display = 'block';
+                console.log('Not logged in - showing guest name input');
             }
         }
 
@@ -273,7 +198,8 @@
             
             // Get username from input or use logged-in user's name
             if (!isLoggedIn) {
-                userName = document.getElementById('userName').value.trim() || 'Anonymous';
+                const nameInput = document.getElementById('userName');
+                userName = nameInput ? nameInput.value.trim() || 'Anonymous' : 'Anonymous';
             }
             
             // Show loading screen
@@ -315,7 +241,7 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Failed to load quiz. Please check your connection and try again.');
+                alert('Failed to load quiz. Please try again.');
                 window.location.href = 'quiz.html';
             }
         }
@@ -330,27 +256,20 @@
             hasAnswered = false;
             selectedAnswer = null;
 
-            // Update counters
             document.getElementById('questionCounter').textContent = 
                 `Question ${currentQuestionIndex + 1}/${questions.length}`;
             document.getElementById('scoreCounter').textContent = 
                 `Score: ${score}/${currentQuestionIndex}`;
             
-            // Update progress bar
             const progress = ((currentQuestionIndex) / questions.length) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
 
-            // Display question
             document.getElementById('questionText').textContent = question.question_text;
-
-            // Hide feedback
             document.getElementById('feedbackBox').classList.remove('show', 'correct', 'incorrect');
 
-            // Clear previous answers
             const answerContainer = document.getElementById('answerContainer');
             answerContainer.innerHTML = '';
 
-            // Show appropriate answer interface based on question type
             if (question.question_type === 'multiple_choice') {
                 displayMultipleChoice(question);
             } else if (question.question_type === 'true_false') {
@@ -359,7 +278,6 @@
                 displayTextInput(question);
             }
 
-            // Show submit button
             document.getElementById('submitBtn').style.display = 'inline-block';
             document.getElementById('nextBtn').style.display = 'none';
             document.getElementById('finishBtn').style.display = 'none';
@@ -417,20 +335,16 @@
                     💡 Hint: Check the question for format guidance
                 </p>
             `;
-            
-            // Focus on input
             setTimeout(() => document.getElementById('textAnswer').focus(), 100);
         }
 
         function selectAnswer(answer, element) {
             if (hasAnswered) return;
 
-            // Remove previous selection
             document.querySelectorAll('.answer-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
 
-            // Mark new selection
             element.classList.add('selected');
             selectedAnswer = answer;
         }
@@ -442,7 +356,6 @@
             let userAnswer = '';
             let isCorrect = false;
 
-            // Get user's answer based on question type
             if (question.question_type === 'text_input') {
                 const textInput = document.getElementById('textAnswer');
                 if (!textInput || !textInput.value.trim()) {
@@ -450,8 +363,6 @@
                     return;
                 }
                 userAnswer = textInput.value.trim();
-                
-                // Check if answer is correct (case-insensitive)
                 isCorrect = userAnswer.toLowerCase() === question.text_answer.toLowerCase();
             } else {
                 if (!selectedAnswer) {
@@ -465,19 +376,15 @@
             hasAnswered = true;
             userAnswers.push(userAnswer);
 
-            // Update score
             if (isCorrect) {
                 score++;
             }
 
-            // Show feedback
             showFeedback(isCorrect, question);
 
-            // Update score counter
             document.getElementById('scoreCounter').textContent = 
                 `Score: ${score}/${currentQuestionIndex + 1}`;
 
-            // Show appropriate button
             document.getElementById('submitBtn').style.display = 'none';
             
             if (currentQuestionIndex < questions.length - 1) {
@@ -486,7 +393,6 @@
                 document.getElementById('finishBtn').style.display = 'inline-block';
             }
 
-            // Highlight correct/incorrect answers
             if (question.question_type !== 'text_input') {
                 highlightAnswers(question, userAnswer);
             }
@@ -513,8 +419,6 @@
             }
 
             feedbackText.textContent = question.explanation;
-
-            // Scroll to feedback
             feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
@@ -533,7 +437,6 @@
                     option.classList.remove('selected');
                 }
                 
-                // Disable clicking
                 option.style.pointerEvents = 'none';
             });
         }
@@ -541,7 +444,6 @@
         function nextQuestion() {
             currentQuestionIndex++;
             
-            // Auto-save progress for logged-in users
             if (isLoggedIn && currentQuestionIndex < questions.length) {
                 saveProgress();
             }
@@ -550,29 +452,24 @@
         }
 
         function finishQuiz() {
-            // Stop auto-save
             if (autoSaveInterval) {
                 clearInterval(autoSaveInterval);
             }
             
-            // Save results to sessionStorage
             const results = {
                 score: score,
                 totalQuestions: questions.length,
                 categoryName: categoryName,
                 categoryId: categoryId,
-                userName: userName || 'Anonymous',
+                userName: userName,
                 userAnswers: userAnswers,
                 questions: questions
             };
 
             sessionStorage.setItem('quizResults', JSON.stringify(results));
-
-            // Redirect to results page
             window.location.href = 'results.html';
         }
 
-        // Auto-save progress every 30 seconds
         function startAutoSave() {
             if (!isLoggedIn) return;
             
@@ -581,10 +478,9 @@
                     saveProgress();
                     console.log('Progress auto-saved');
                 }
-            }, 30000); // 30 seconds
+            }, 30000);
         }
 
-        // Save progress to database
         async function saveProgress() {
             if (!isLoggedIn) return;
             
@@ -607,18 +503,14 @@
                 const data = await response.json();
                 if (data.success) {
                     console.log('Progress saved successfully');
-                } else {
-                    console.error('Failed to save progress:', data.message);
                 }
             } catch (error) {
                 console.error('Error saving progress:', error);
             }
         }
 
-        // Prevent accidental page refresh
         window.addEventListener('beforeunload', function(e) {
             if (questions.length > 0 && currentQuestionIndex < questions.length) {
-                // Save progress before leaving
                 if (isLoggedIn) {
                     saveProgress();
                 }

@@ -738,3 +738,40 @@ window.toggleDarkMode = toggleDarkMode;
 window.copyToClipboard = copyToClipboard;
 
 console.log('%c✅ NamiQuiz JavaScript Loaded Successfully!', 'color: #28a745; font-size: 14px; font-weight: bold;');
+
+
+// ===================================
+// LOGOUT FUNCTION
+// ===================================
+async function logout(event) {
+    if (event) event.preventDefault();
+    
+    const confirmed = confirm('Are you sure you want to logout?');
+    
+    if (confirmed) {
+        try {
+            const response = await fetch('php/logout.php', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showNotification('Logged out successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Force redirect even if there's an error
+            window.location.href = 'php/logout.php';
+        }
+    }
+}
+
+// Make logout available globally
+window.logout = logout;

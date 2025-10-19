@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NamiQuiz - Dashboard</title>
+    <title>Dashboard - NamiQuiz</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
                 <li><a href="quiz.html">Take Quiz</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="profile.html">My Profile</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <li><a href="#" onclick="logout(event)" style="color: #FF006E; font-weight: 800;">🚪 Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -31,44 +31,21 @@
 
     <!-- Main Content -->
     <div class="content">
-        <h2 style="text-align: center; margin-bottom: 30px;">Why Choose NamiQuiz?</h2>
+        <h2 style="text-align: center; margin-bottom: 30px;">Your Learning Dashboard</h2>
         
-        <div class="category-grid">
-            <div class="category-card">
-                <h3>📚 110+ Questions</h3>
-                <p>Comprehensive question bank covering 5 different categories</p>
-            </div>
-            
-            <div class="category-card">
-                <h3>⚡ Instant Feedback</h3>
-                <p>Get immediate explanations for every answer to learn faster</p>
-            </div>
-            
-            <div class="category-card">
-                <h3>🎯 Multiple Formats</h3>
-                <p>Multiple choice, true/false, and text input questions</p>
-            </div>
-            
-            <div class="category-card">
-                <h3>📊 Track Progress</h3>
-                <p>Monitor your performance and improvement over time</p>
-            </div>
-        </div>
-
         <!-- Quick Stats -->
-        <div id="quickStats" style="display: none; margin: 40px 0;">
-            <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">Your Quick Stats</h2>
+        <div id="quickStats" style="margin: 40px 0;">
             <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 32px; color: #667eea; font-weight: bold;" id="totalQuizzes">0</div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #667eea;">
+                    <div style="font-size: 48px; color: #667eea; font-weight: bold;" id="totalQuizzes">0</div>
                     <div style="color: #666;">Quizzes Completed</div>
                 </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 32px; color: #28a745; font-weight: bold;" id="avgScore">0%</div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #28a745;">
+                    <div style="font-size: 48px; color: #28a745; font-weight: bold;" id="avgScore">0%</div>
                     <div style="color: #666;">Average Score</div>
                 </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 32px; color: #ffc107; font-weight: bold;" id="bestScore">0%</div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border-left: 5px solid #ffc107;">
+                    <div style="font-size: 48px; color: #ffc107; font-weight: bold;" id="bestScore">0%</div>
                     <div style="color: #666;">Best Score</div>
                 </div>
             </div>
@@ -125,43 +102,47 @@
     <script>
         let currentUser = null;
 
-        // Check authentication on page load
+        // REQUIRE LOGIN - Check authentication on page load
         window.addEventListener('DOMContentLoaded', async function() {
-            await checkAuth();
-            await loadQuickStats();
+            const isAuthenticated = await checkAuth();
+            if (isAuthenticated) {
+                await loadQuickStats();
+            }
         });
 
-        // Check if user is logged in
+        // Check if user is logged in - REDIRECT IF NOT
         async function checkAuth() {
             try {
-                const response = await fetch('php/get_user_profile.php');
+                const response = await fetch('php/check_login_status.php');
                 const data = await response.json();
                 
-                if (data.success) {
+                if (data.success && data.isLoggedIn) {
                     currentUser = data.user;
                     document.getElementById('welcomeTitle').textContent = 
                         `Welcome back, ${data.user.full_name}! 🇳🇦`;
+                    return true;
                 } else {
                     // Not logged in, redirect to landing page
                     window.location.href = 'index.html';
+                    return false;
                 }
             } catch (error) {
                 console.error('Auth check failed:', error);
                 window.location.href = 'index.html';
+                return false;
             }
         }
 
         // Load quick stats
         async function loadQuickStats() {
             try {
-                const response = await fetch('php/get_user_stats.php');
+                const response = await fetch('php/get_user_profile.php');
                 const data = await response.json();
                 
-                if (data.success && data.stats) {
-                    document.getElementById('quickStats').style.display = 'block';
-                    document.getElementById('totalQuizzes').textContent = data.stats.total_quizzes || 0;
-                    document.getElementById('avgScore').textContent = (data.stats.average_score || 0) + '%';
-                    document.getElementById('bestScore').textContent = (data.stats.best_score || 0) + '%';
+                if (data.success && data.user) {
+                    document.getElementById('totalQuizzes').textContent = data.user.total_quizzes || 0;
+                    document.getElementById('avgScore').textContent = Math.round(data.user.average_score || 0) + '%';
+                    document.getElementById('bestScore').textContent = Math.round(data.user.best_score || 0) + '%';
                 }
             } catch (error) {
                 console.error('Error loading stats:', error);
@@ -174,7 +155,9 @@
         }
 
         // Logout function
-        async function logout() {
+        async function logout(event) {
+            if (event) event.preventDefault();
+            
             if (confirm('Are you sure you want to logout?')) {
                 try {
                     await fetch('php/logout.php');

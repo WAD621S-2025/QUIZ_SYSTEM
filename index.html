@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to NamiQuiz - Login</title>
+    <title>Welcome to NamiQuiz - Login to Continue</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,6 +12,9 @@
         <div class="container">
             <a href="index.html" class="logo">🎓 NamiQuiz</a>
             <ul class="nav-links">
+                <li><a href="about.html">About</a></li>
+                <li><a href="quiz.html">Take Quiz</a></li>
+                <li><a href="contact.html">Contact</a></li>
                 <li><a href="login.html">Login</a></li>
                 <li><a href="signup.html">Sign Up</a></li>
             </ul>
@@ -22,7 +25,11 @@
     <div class="hero">
         <h1>Welcome to NamiQuiz! 🇳🇦</h1>
         <p>Test your knowledge on Namibian History, Culture, Computer Science, and more!</p>
-        <a href="login.html" class="btn">Get Started</a>
+        <p style="font-size: 18px; margin-top: 20px; opacity: 0.9;">Login or Sign Up to Start Learning</p>
+        <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
+            <a href="login.html" class="btn">Login</a>
+            <a href="signup.html" class="btn btn-secondary">Create Account</a>
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -87,9 +94,11 @@
 
         <div style="text-align: center; margin-top: 50px;">
             <h2>Ready to Test Your Knowledge?</h2>
-            <p style="font-size: 18px; margin: 20px 0;">Create an account or log in to start learning today!</p>
-            <a href="login.html" class="btn">Login to Continue</a>
-            <a href="signup.html" class="btn btn-secondary" style="margin-left: 15px;">Create Account</a>
+            <p style="font-size: 18px; margin: 20px 0;">Create an account or login to start learning today!</p>
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
+                <a href="login.html" class="btn">Login Now</a>
+                <a href="signup.html" class="btn btn-secondary">Sign Up Free</a>
+            </div>
         </div>
     </div>
 
@@ -99,20 +108,20 @@
         <p>Built with ❤️ for Namibian students and lifelong learners</p>
     </footer>
 
-    <script src="js/script.js"></script>
     <script>
-        // Check if user is already logged in
+        // Check if user is already logged in - redirect to home dashboard
         window.addEventListener('DOMContentLoaded', async function() {
             try {
-                const response = await fetch('php/get_user_profile.php');
+                const response = await fetch('php/check_login_status.php');
                 const data = await response.json();
                 
-                if (data.success) {
-                    // User is logged in, redirect to home
+                if (data.success && data.isLoggedIn) {
+                    // User is logged in, redirect to home dashboard
+                    console.log('User logged in, redirecting to home...');
                     window.location.href = 'home.html';
                 }
             } catch (error) {
-                // Not logged in, stay on landing page
+                // Not logged in or error, stay on landing page
                 console.log('Not logged in - showing landing page');
             }
         });

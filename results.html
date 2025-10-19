@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Results - Namibian Learning Quiz System</title>
+    <title>Quiz Results - NamiQuiz</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,15 +11,15 @@
     <nav>
         <div class="container">
             <a href="index.html" class="logo">🎓 NamiQuiz</a>
-            <ul class="nav-links" id="navLinks">
+            <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="quiz.html">Take Quiz</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="login.html" id="loginLink">Login</a></li>
-                <li><a href="signup.html" id="signupLink">Sign Up</a></li>
-                <li style="display: none;" id="profileLink"><a href="profile.html">My Profile</a></li>
-                <li style="display: none;" id="logoutLink"><a href="#" onclick="logoutUser()">Logout</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+                <li id="profileLink" style="display: none;"><a href="profile.html">My Profile</a></li>
+                <li style="display: none;"><a href="#" onclick="logout(event)" style="color: #FF006E; font-weight: 800;">🚪 Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -75,20 +75,18 @@
         <p>Built with ❤️ for Namibian students and lifelong learners</p>
     </footer>
 
+    <script src="js/nav-handler.js"></script>
     <script>
-        // Get results from sessionStorage
         let quizResults = null;
         let categoryId = null;
 
         window.addEventListener('DOMContentLoaded', function() {
-            // Try to get results from sessionStorage
             const resultsData = sessionStorage.getItem('quizResults');
             
             if (resultsData) {
                 quizResults = JSON.parse(resultsData);
                 displayResults();
             } else {
-                // No results found - show message
                 document.getElementById('scoreDisplay').innerHTML = `
                     <h2>No Results Found</h2>
                     <p>You haven't completed a quiz yet!</p>
@@ -104,17 +102,14 @@
             const percentage = Math.round((score / totalQuestions) * 100);
             const incorrect = totalQuestions - score;
 
-            // Update score display
             document.getElementById('scoreText').textContent = `${score} / ${totalQuestions}`;
             document.getElementById('scoreMessage').textContent = `You scored ${percentage}% in ${categoryName}`;
 
-            // Show breakdown
             document.getElementById('resultsBreakdown').style.display = 'grid';
             document.getElementById('correctCount').textContent = score;
             document.getElementById('incorrectCount').textContent = incorrect;
             document.getElementById('percentageScore').textContent = percentage + '%';
 
-            // Show performance message
             const perfMsg = document.getElementById('performanceMessage');
             perfMsg.style.display = 'block';
             
@@ -147,10 +142,7 @@
             perfMsg.style.background = bgColor;
             perfMsg.style.borderLeft = '5px solid ' + (percentage >= 60 ? '#28a745' : '#dc3545');
 
-            // Display question review
             displayQuestionReview(questions, userAnswers);
-
-            // Save results to database
             saveResultsToDatabase(userName || 'Anonymous', categoryId, score, totalQuestions);
         }
 
@@ -175,8 +167,6 @@
                 
                 let correctAnswerText = '';
                 if (question.question_type === 'multiple_choice') {
-                    const options = ['A', 'B', 'C', 'D'];
-                    const optionIndex = options.indexOf(question.correct_answer.toUpperCase());
                     correctAnswerText = question[`option_${question.correct_answer.toLowerCase()}`];
                 } else if (question.question_type === 'true_false') {
                     correctAnswerText = question[`option_${question.correct_answer.toLowerCase()}`];
@@ -231,10 +221,7 @@
                 if (data.success) {
                     console.log('Results saved successfully!');
                 } else {
-                    console.error('Error saving results:', data.error);
-                }
-            } catch (error) {
-                console.error('Error saving results:', error);
+                    console.error('Error saving results:', error);
             }
         }
 
@@ -247,4 +234,7 @@
         }
     </script>
 </body>
-</html>
+</html>Error saving results:', data.error);
+                }
+            } catch (error) {
+                console.error('
